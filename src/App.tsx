@@ -333,16 +333,31 @@ export default function App() {
   };
 
   const triggerPrint = () => {
+    const activeTitle = `CulinaPlan_${mealPlan?.budget?.classification || "Meal"}_Prep_Plan`;
+    const originalTitle = document.title;
+    try {
+      document.title = activeTitle.replace(/\s+/g, "_");
+    } catch (e) {
+      console.warn("Could not change document title temporarily:", e);
+    }
+    
+    window.focus();
     window.print();
+
+    setTimeout(() => {
+      try {
+        document.title = originalTitle;
+      } catch (e) {}
+    }, 150);
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f6f2] font-sans text-[#333333] leading-relaxed py-8 px-4 md:px-8 relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#f8f6f2] print:bg-white font-sans text-[#333333] leading-relaxed py-8 px-4 md:px-8 relative overflow-x-hidden print:py-0 print:px-0">
       
       {/* Decorative background grid subtle accent matching natural sand tones */}
-      <div className="absolute inset-0 bg-[radial-gradient(#ede9e0_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none opacity-60"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(#ede9e0_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none opacity-60 print:hidden"></div>
 
-      <div className="max-w-6xl mx-auto h-full flex flex-col relative z-10">
+      <div className="max-w-6xl mx-auto h-full flex flex-col relative z-10 print:max-w-none print:w-full">
         
         {/* CulinaPlan AI Design Theme Premium Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#e5e0d5] pb-6 mb-8 gap-4">
@@ -360,7 +375,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 print:hidden">
             <span className="text-[11px] px-3 py-1 font-semibold bg-[#f0ede6] text-[#5a5a40] rounded-full border border-[#ede9e0] select-none">
               Gemini 3.5 Flash Active Agent
             </span>
@@ -372,10 +387,10 @@ export default function App() {
         </header>
 
         {/* Outer Layout Split layout structured specifically to highlight CulinaPlan visual rhythms */}
-        <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start print:flex print:flex-col print:gap-6 print:p-0">
           
           {/* LEFT PANEL: INPUT GENERATOR & PRESETS (lg:span-4 or span-5) */}
-          <section className="lg:col-span-4 flex flex-col gap-6">
+          <section className="lg:col-span-4 flex flex-col gap-6 print:hidden">
             
             {/* Input card with cozy border style */}
             <div id="duty-input-card" className="bg-white rounded-[24px] border border-[#ede9e0] shadow-xs p-5 md:p-6">
@@ -496,7 +511,7 @@ export default function App() {
           </section>
 
           {/* RIGHT PANEL: OUTPUT DETAILS (lg:col-span-8) */}
-          <section className="lg:col-span-8 flex flex-col gap-6">
+          <section className="lg:col-span-8 print:col-span-12 print:w-full flex flex-col gap-6">
 
             <AnimatePresence mode="wait">
               {loading ? (
@@ -544,7 +559,7 @@ export default function App() {
                   className="flex flex-col gap-6"
                 >
                   {mealPlan.isDemoMode && (
-                    <div className="bg-amber-50/80 border border-amber-200/80 rounded-[24px] p-5 text-xs text-amber-900 flex flex-col gap-2.5 animate-fadeIn">
+                    <div className="bg-amber-50/80 border border-amber-200/80 rounded-[24px] p-5 text-xs text-amber-900 flex flex-col gap-2.5 animate-fadeIn print:hidden">
                       <div className="flex items-start gap-2.5">
                         <Sparkles className="w-5 h-5 text-[#c16646] shrink-0 mt-0.5" />
                         <div className="flex flex-col gap-1">
@@ -599,7 +614,7 @@ export default function App() {
                     </div>
 
                     {/* Export / Sync Action buttons */}
-                    <div className="flex items-center gap-2 justify-end w-full md:w-auto border-t md:border-t-0 border-[#ede9e0] pt-3 md:pt-0">
+                    <div className="flex items-center gap-2 justify-end w-full md:w-auto border-t md:border-t-0 border-[#ede9e0] pt-3 md:pt-0 print:hidden">
                       <button
                         onClick={copyAsMarkdown}
                         className="px-3.5 py-2 bg-[#f0ede6] hover:bg-[#e5e0d5] transition text-[#5a5a40] rounded-full text-xs font-medium flex items-center gap-1.5 cursor-pointer border border-[#ede9e0]/60"
@@ -611,11 +626,11 @@ export default function App() {
 
                       <button
                         onClick={triggerPrint}
-                        className="px-3.5 py-2 bg-[#f0ede6] hover:bg-[#e5e0d5] transition text-[#5a5a40] rounded-full text-xs font-medium flex items-center gap-1.5 cursor-pointer border border-[#ede9e0]/60"
-                        title="Print Meal Guide"
+                        className="px-4 py-2 bg-[#5a5a40] hover:bg-[#4c4c36] transition text-white rounded-full text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm border border-[#5a5a40]/30"
+                        title="Print Meal Guide or Save as PDF"
                       >
-                        <Printer className="w-3.5 h-3.5" />
-                        <span>Print</span>
+                        <Printer className="w-4 h-4 text-white" />
+                        <span>Print &amp; Download PDF</span>
                       </button>
                     </div>
                   </div>
@@ -740,7 +755,7 @@ export default function App() {
                         </span>
                       </div>
 
-                      <div className="flex flex-col gap-6 overflow-y-auto max-h-[420px] pr-1">
+                      <div className="flex flex-col gap-6 overflow-y-auto max-h-[420px] pr-1 print:max-h-none print:overflow-visible">
                         {mealPlan.groceryList.map((categoryObj, catIdx) => (
                           <div key={catIdx} className="flex flex-col gap-2">
                             <span className="text-[11px] font-bold text-[#c16646] uppercase border-b border-[#f0ede6] pb-1 tracking-[0.15em] self-start inline-block">
@@ -801,7 +816,7 @@ export default function App() {
                         Handy ingredient switch-ups to easily bypass food allergies or leverage missing pantry candidates.
                       </p>
 
-                      <div className="flex flex-col gap-3 overflow-y-auto max-h-[420px] pr-1">
+                      <div className="flex flex-col gap-3 overflow-y-auto max-h-[420px] pr-1 print:max-h-none print:overflow-visible">
                         {mealPlan.substitutions.map((sub, index) => (
                           <div key={index} className="p-4 bg-[#fdfbf7] hover:bg-white rounded-xl border border-[#ede9e0]/85 flex flex-col gap-2 transition shadow-3xs">
                             <div className="flex items-center justify-between flex-wrap gap-2">

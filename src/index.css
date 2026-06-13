@@ -6,3 +6,48 @@
   --font-serif: "Lora", "Georgia", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #1a1a10 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-image: none !important;
+  }
+
+  /* Eliminate gray/muddy shadows and simplify borders for laser/inkjet printing */
+  .shadow-sm, .shadow-xs, .shadow-2xs, .shadow-3xs, .shadow-md {
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  /* Avoid cutting single card elements in half across paper sheets */
+  div, section, label, li {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force headers to remain sharp and dark */
+  h1, h2, h3, h4, .text-\[\#5a5a40\] {
+    color: #40402b !important;
+  }
+
+  /* Maintain distinct readability for background cards and list labels */
+  .bg-\[\#fdfbf7\], .bg-stone-50, .bg-[#fbfbf9] {
+    background-color: #faf9f6 !important;
+    background: #faf9f6 !important;
+    border-color: #e5e2d9 !important;
+  }
+
+  /* Ensure checkbox borders are highly visible and defined */
+  .border, .border-\[\#ede9e0\], .border-\[\#f0ede6\] {
+    border-color: #d8d3c5 !important;
+  }
+
+  /* Adjust page flow beautifully */
+  @page {
+    margin: 1.5cm;
+    size: auto;
+  }
+}

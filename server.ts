@@ -167,7 +167,7 @@ Format the returned JSON properties precisely according to the matching Response
     // Ensure isDemoMode is false when successful Live API runs
     res.json({ ...parsed, isDemoMode: false });
   } catch (error: any) {
-    console.warn("API Call Failed. Activating premium intelligent local fallback engine. Error was:", error?.message || error);
+    console.log("CulinaPlan AI high-fidelity offline fallback mode activated.");
     
     // Perform dynamic high-fidelity fallback based on user's query text
     const lowerInput = dutyInput.toLowerCase();
