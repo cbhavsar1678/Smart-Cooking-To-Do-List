@@ -1,0 +1,6 @@
+{
+  "name": "Smart Cooking To-Do List",
+  "description": "An AI-powered meal planner and preparation checklist tailored to your daily schedule, dietary goals, and budget.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
